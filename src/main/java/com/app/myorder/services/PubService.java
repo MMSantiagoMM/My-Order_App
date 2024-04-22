@@ -7,9 +7,7 @@ import com.app.myorder.repositories.PubRepository;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class PubService implements GenericService<Pub, PubDto, UUID>{
@@ -30,8 +28,8 @@ public class PubService implements GenericService<Pub, PubDto, UUID>{
         pub.setName(pubDto.getName());
         pub.setTableNumber(pubDto.getTableNumber());
         pub.setOrder(pubDto.getOrder());
-        pub.setTax(pubDto.getTax());
-        pub.setTotal(pubDto.getTotal());
+        pub.setTax(19.0);
+        pub.setTotal(calculateTotalWithTaxes(calculateTotalBill(pubDto.getOrder())));
         return repository.save(pub);
 
     }
@@ -60,4 +58,17 @@ public class PubService implements GenericService<Pub, PubDto, UUID>{
             return false;
         }
     }
+
+
+    public Double calculateTotalBill(Map<String,Double> order){
+        Collection<Double> valueOrder = order.values();
+        Optional<Double> totalOptional = valueOrder.stream().reduce(Double::sum);
+        return totalOptional.get();
+    }
+
+    public Double calculateTotalWithTaxes(Double total){
+        return total + (total * 0.19);
+    }
+
+
 }

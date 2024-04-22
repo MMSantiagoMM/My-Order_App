@@ -15,19 +15,17 @@ public class PubDto {
 
     private Double tax;
 
-    private Double total;
 
 
     public PubDto() {
     }
 
-    public PubDto(UUID id, String name, Integer tableNumber, Map<String, Double> order, Double tax, Double total) {
+    public PubDto(UUID id, String name, Integer tableNumber, Map<String, Double> order, Double tax) {
         this.id = id;
         this.name = name;
         this.tableNumber = tableNumber;
         this.order = order;
         this.tax = tax;
-        this.total = total;
     }
 
     public UUID getId() {
@@ -70,11 +68,5 @@ public class PubDto {
         this.tax = tax;
     }
 
-    public Double getTotal() {
-        return total;
-    }
 
-    public void setTotal(Double total) {
-        this.total = total;
-    }
 }
