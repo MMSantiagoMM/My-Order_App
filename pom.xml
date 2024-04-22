@@ -46,7 +46,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-		<finalName>my-order-app</finalName>
+		<finalName>myorder</finalName>
 	</build>
 
 </project>
