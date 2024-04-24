@@ -72,28 +72,4 @@ public class PubService implements IGenericService<Pub, PubDto, UUID> {
     }
 
 
-    public Double calculateTotalBill(Map<String,Double> order){
-        Collection<Double> valueOrder = order.values();
-        Optional<Double> totalOptional = valueOrder.stream().reduce(Double::sum);
-        return totalOptional.get();
-    }
-
-    public Double calculateTotalWithTaxes(Double total){
-        return total + (total * 0.19);
-    }
-
-
-    private String[] getNullPropertyNames(Object source) {
-        final BeanWrapper src = new BeanWrapperImpl(source);
-        PropertyDescriptor[] pds = src.getPropertyDescriptors();
-
-        Set<String> emptyNames = new HashSet<>();
-        for (PropertyDescriptor pd : pds) {
-            Object srcValue = src.getPropertyValue(pd.getName());
-            if (srcValue == null) emptyNames.add(pd.getName());
-        }
-
-        String[] result = new String[emptyNames.size()];
-        return emptyNames.toArray(result);
-    }
 }

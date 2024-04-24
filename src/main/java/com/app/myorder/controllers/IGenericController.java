@@ -1,14 +1,12 @@
 package com.app.myorder.controllers;
 
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-public interface GenericController<E,D,I> {
+public interface IGenericController<E,D,I> {
 
 
     public ResponseEntity<E> create(@RequestBody D dto);
