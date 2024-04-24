@@ -41,10 +41,12 @@ public class PubController implements GenericController<Pub, PubDto, UUID> {
         return new ResponseEntity<>(service.getAll(),HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     @Override
     public ResponseEntity<Pub> update(PubDto dto, UUID id) {
-        return null;
+        return service.update(dto,id)
+                .map(field -> new ResponseEntity<>(field,HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/{id}")

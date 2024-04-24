@@ -1,16 +1,19 @@
 package com.app.myorder.services;
 
+import com.app.myorder.entities.Pub;
 import com.app.myorder.exceptions.OrderNotFoundException;
 import com.app.myorder.dtos.PubDto;
-import com.app.myorder.entities.Pub;
 import com.app.myorder.repositories.PubRepository;
-import io.swagger.v3.oas.annotations.servers.Server;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.stereotype.Service;
 
+import java.beans.PropertyDescriptor;
 import java.util.*;
 
 @Service
-public class PubService implements GenericService<Pub, PubDto, UUID>{
+public class PubService implements IGenericService<Pub, PubDto, UUID> {
 
     private final PubRepository repository;
 
@@ -46,7 +49,16 @@ public class PubService implements GenericService<Pub, PubDto, UUID>{
 
     @Override
     public Optional<Pub> update(PubDto pubDto, UUID id) {
-        return null;
+        Optional<Pub> existingPub = repository.findById(id);
+        if(existingPub.isPresent()){
+            Pub existingPubEntity = existingPub.get();
+            BeanUtils.copyProperties(pubDto, existingPubEntity, getNullPropertyNames(pubDto));
+
+            existingPubEntity.setTotal(calculateTotalWithTaxes(calculateTotalBill(pubDto.getOrder())));
+            return Optional.of(repository.save(existingPubEntity));
+        }else {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -71,4 +83,17 @@ public class PubService implements GenericService<Pub, PubDto, UUID>{
     }
 
 
+    private String[] getNullPropertyNames(Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        PropertyDescriptor[] pds = src.getPropertyDescriptors();
+
+        Set<String> emptyNames = new HashSet<>();
+        for (PropertyDescriptor pd : pds) {
+            Object srcValue = src.getPropertyValue(pd.getName());
+            if (srcValue == null) emptyNames.add(pd.getName());
+        }
+
+        String[] result = new String[emptyNames.size()];
+        return emptyNames.toArray(result);
+    }
 }

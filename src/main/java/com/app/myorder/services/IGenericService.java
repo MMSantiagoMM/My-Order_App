@@ -3,7 +3,7 @@ package com.app.myorder.services;
 import java.util.List;
 import java.util.Optional;
 
-public interface GenericService <E,D,I>{
+public interface IGenericService<E,D,I>{
 
 
     public E create(D d);
